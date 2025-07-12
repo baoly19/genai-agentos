@@ -18,41 +18,58 @@ openai_client = OpenAI(api_key=OPENAPI_KEY, base_url="https://api.braintrust.dev
 
 @session.bind(
     name="diagnosis_reasoner",
-    description="Suggest 1–3 likely diagnoses based on structured patient triage data with justifications."
+    description="Suggest 1–3 likely diagnoses based on structured patient triage data and lab test results with justifications."
 )
 async def diagnosis_reasoner(
     agent_context: GenAIContext,
-    triage_report: Annotated[str, "JSON string output from Symptom Triage Agent"]
+    triage_report: Annotated[str, "JSON string output from Symptom Triage Agent"],
+    lab_results: Annotated[str, "Optional JSON string containing lab test results summary"] = None
 ):
     """
-    Suggest possible diagnoses based on structured triage data:
+    Suggest possible diagnoses based on structured triage data and lab results:
     - age
     - gender
     - medical_history
     - symptoms
     - duration
     - severity
+    - lab test results
     """
     agent_context.logger.info("Running Diagnosis Reasoning Agent")
     
-    # Parse the JSON string if needed
+    # Parse the JSON strings
     if isinstance(triage_report, str):
         triage_data = json.loads(triage_report)
     else:
         triage_data = triage_report
 
+    lab_data = None
+    if lab_results:
+        if isinstance(lab_results, str):
+            lab_data = json.loads(lab_results)
+        else:
+            lab_data = lab_results
+
+    # Build the context for the prompt
+    clinical_context = f"""
+Based on the following structured triage data:
+{triage_data}
+
+{"Additional laboratory findings:" if lab_data else ""}
+{lab_data if lab_data else ""}
+"""
+
     prompt = f"""
 You are an AI clinical assistant.
 
-Based on the following structured triage data:
-{triage_data}
+{clinical_context}
 
 Suggest the 1–3 most likely diagnoses.
 
 For each condition, return:
 - the name of the condition
 - confidence level: low | medium | high
-- a brief justification (e.g., based on symptoms, risk factors, history)
+- a brief justification (e.g., based on symptoms, lab results, risk factors, history)
 
 Return only in the following JSON format:
 {{
@@ -60,7 +77,7 @@ Return only in the following JSON format:
     {{
       "condition": "condition name",
       "confidence": "low | medium | high",
-      "justification": "short medical reasoning"
+      "justification": "short medical reasoning including relevant lab findings if available"
     }},
     ...
   ]
