@@ -14,7 +14,7 @@ load_dotenv()
 
 OPENAPI_KEY = os.environ.get("OPENAPI_KEY")
 
-openai_client = OpenAI(api_key=OPENAPI_KEY)
+openai_client = OpenAI(api_key=OPENAPI_KEY, base_url="https://api.braintrust.dev/v1/proxy")
 
 @session.bind(
     name="diagnosis_reasoner",

@@ -14,7 +14,7 @@ OPENAPI_KEY = os.environ.get("OPENAPI_KEY")
 
 AGENT_JWT = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlMjk0OGU2OS1mZjE4LTRlMTctYjYxYS1hNzIyNzI3YzQ3ZjYiLCJleHAiOjI1MzQwMjMwMDc5OSwidXNlcl9pZCI6IjY5NjVlNWMwLTE0MzQtNDkzNS1hYTAwLWFjZTIxNTVmMTE5YSJ9.tOMvML9zrRhkEPUq2DHwQETdzyklG_K9cTkIPOfQvfw" # noqa: E501
 
-openai_client = OpenAI(api_key=OPENAPI_KEY)
+openai_client = OpenAI(api_key=OPENAPI_KEY, base_url="https://api.braintrust.dev/v1/proxy")
 session = GenAISession(jwt_token=AGENT_JWT)
 
 
