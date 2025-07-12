@@ -1,11 +1,25 @@
 import asyncio
 from typing import Any, Annotated
+# medicap_agent.py  ── drop this in your agents/ dir
+from __future__ import annotations
+
+from typing import Annotated, Any, List
+from io import BytesIO
+from pathlib import Path
+
+import torch
+import transformers
+from PIL import Image
+from torchvision import transforms
+
 
 from genai_session.session import GenAISession
 
 session = GenAISession(
     jwt_token=""
 )
+
+
 
 
 @session.bind(name="read_txt_file", description="Get content from the txt file")
