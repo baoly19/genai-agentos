@@ -6,6 +6,7 @@ from openai import OpenAI
 from dotenv import load_dotenv
 import os
 import json
+# from generate_prescription_pdf import generate_treatment_pdf
 
 load_dotenv()
 
@@ -35,12 +36,6 @@ async def treatment_recommender(
     - medical cautions
     """
     agent_context.logger.info("Running Treatment Recommendation Agent")
-
-    # Extract the top diagnosis only
-    # top_diagnosis = diagnosis_data.get("diagnoses", [])[0] if diagnosis_data.get("diagnoses") else None
-
-    # if not top_diagnosis:
-    #     return {"error": "No diagnosis data provided."}
 
     prompt = f"""
 You are a clinical treatment assistant.
@@ -82,6 +77,7 @@ Return only the result in this JSON format:
 
     result = response.choices[0].message.content.strip()
     agent_context.logger.info(f"Treatment plan result: {result}")
+    # pdf_path = generate_treatment_pdf(result, patient_id="anonymous-001")
 
     return {"treatment_plan": result}
 
