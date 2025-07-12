@@ -14,7 +14,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-
 AGENT_JWT = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5Mjk2MzhjNy1lMGE2LTQyNGQtOWVjNS1mYmJmYzEzMjY0NzIiLCJleHAiOjI1MzQwMjMwMDc5OSwidXNlcl9pZCI6IjM0ZDAyNjI2LWVhNTAtNDhkMi04NWM1LWNkODUzNzViZjdlZSJ9.0LNmjs84uX-iK3hF9eyz5y3bkkUfj7nPy_9sx09XRII" # noqa: E501
 session = GenAISession(jwt_token=AGENT_JWT)
 
@@ -30,7 +29,9 @@ def _pdf_bytes_to_text(pdf_bytes: bytes, *, dpi: int = 300, lang: str = "eng") -
     return "\n".join(chunks)
 
 
-
+API_KEY = os.getenv("OPENAPI_KEY")
+print(API_KEY)
+client = OpenAI(api_key=API_KEY, base_url = "https://api.braintrust.dev/v1/proxy")
 
 @session.bind(
     name="ocr_lab_test_result",
@@ -52,9 +53,7 @@ async def ocr_lab_test_result(
         None, _pdf_bytes_to_text, pdf_bytes
     )
     # Use openai to summarize the text
-    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"), base_url = "https://braintrust.dev/proxy/v1")
-
-    response = client.ChatCompletion.create(
+    response = client.chat.completions.create(
         model="gpt-4o",
         messages=[{"role": "system", "content": "You are a helpful assistant. Summarize the findings, and provide a concise summary highlighting the key abnormalities and their potential significance from the lab test result."},
                   {"role": "user", "content": text}],
