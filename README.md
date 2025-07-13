@@ -53,8 +53,8 @@ This system uses a multi-agent architecture to provide comprehensive medical ana
 
 
 ## 🔄 Example Workflow Process
-
-[put image later]
+### Case 1 workflow (Patient with chest X-ray result)
+![Workflow Diagram](assets/example_workflow.svg)
 
 
 ## 🛠️ Technical Requirements
