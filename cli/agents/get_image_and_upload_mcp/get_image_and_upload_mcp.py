@@ -5,7 +5,7 @@ from genai_session.utils.context import GenAIContext
 import base64
 from fastmcp import Client
 
-AGENT_JWT = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyNmIwY2U5My0wN2I0LTRmYmItOTIxNC04ZDIyMTdkMDNiNzQiLCJleHAiOjI1MzQwMjMwMDc5OSwidXNlcl9pZCI6IjM0ZDAyNjI2LWVhNTAtNDhkMi04NWM1LWNkODUzNzViZjdlZSJ9.YaVRK9TyL7oF-5dz1AU8Lr0NoeSOgi1rvzqIgBxWv1M" # noqa: E501
+AGENT_JWT = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4MzRhZGI4Ny1lNzFkLTQwZjgtODY3Yi1lMDEyZDcxOTg4YjIiLCJleHAiOjI1MzQwMjMwMDc5OSwidXNlcl9pZCI6IjhhNTM3MjVmLTMzNzAtNDk3ZS05MDU5LWQ1MmRmOTdmZjE0OSJ9.Wg6uJ8P4gDY61uVTk0EPu6CEmsEaKVG7brhYQcVWNMs" # noqa: E501
 session = GenAISession(jwt_token=AGENT_JWT)
 
 MCP_URL = "https://896e41804afd.ngrok-free.app/mcp"
