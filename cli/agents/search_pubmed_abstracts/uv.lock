@@ -237,6 +237,7 @@ dependencies = [
     { name = "genai-protocol" },
     { name = "loguru" },
     { name = "openai" },
+    { name = "pubmedclient" },
     { name = "pydantic" },
     { name = "python-dotenv" },
     { name = "requests" },
@@ -247,6 +248,7 @@ requires-dist = [
     { name = "genai-protocol" },
     { name = "loguru", specifier = ">=0.7.3" },
     { name = "openai", specifier = ">=1.70.0" },
+    { name = "pubmedclient", specifier = ">=0.1.0" },
     { name = "pydantic", specifier = "==2.11.1" },
     { name = "python-dotenv", specifier = ">=1.1.0" },
     { name = "requests", specifier = ">=2.32.3" },
@@ -523,6 +525,19 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/9a/4c/b0fe775a2bdd01e176b14b574be679d84fc83958335790f7c9a686c1f468/propcache-0.3.2-cp313-cp313t-win32.whl", hash = "sha256:f86e5d7cd03afb3a1db8e9f9f6eff15794e79e791350ac48a8c924e6f439f394", size = 41175, upload-time = "2025-06-09T22:55:38.436Z" },
     { url = "https://files.pythonhosted.org/packages/a4/ff/47f08595e3d9b5e149c150f88d9714574f1a7cbd89fe2817158a952674bf/propcache-0.3.2-cp313-cp313t-win_amd64.whl", hash = "sha256:9704bedf6e7cbe3c65eca4379a9b53ee6a83749f047808cbb5044d40d7d72198", size = 44857, upload-time = "2025-06-09T22:55:39.687Z" },
     { url = "https://files.pythonhosted.org/packages/cc/35/cc0aaecf278bb4575b8555f2b137de5ab821595ddae9da9d3cd1da4072c7/propcache-0.3.2-py3-none-any.whl", hash = "sha256:98f1ec44fb675f5052cccc8e609c46ed23a35a1cfd18545ad4e29002d858a43f", size = 12663, upload-time = "2025-06-09T22:56:04.484Z" },
+]
+
+[[package]]
+name = "pubmedclient"
+version = "0.2.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "httpx" },
+    { name = "pydantic" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/63/10/27c527a3e6a228dcc39c39428d71c0107c9c587ae45d1cc31d8ea001863e/pubmedclient-0.2.0.tar.gz", hash = "sha256:0a2f46a704bd51367b6fa6b69510c44e61ee4fa97c2cb4c185ca8a13674ef199", size = 58513, upload-time = "2025-01-01T14:16:07.503Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/fe/c6/dcc224a0e1396386991327fc46a294d330efd8c6380447cf733db887a694/pubmedclient-0.2.0-py3-none-any.whl", hash = "sha256:b7460bd5f54174f3d3ba5ffe3f5ed3826c46e0cdbcd651a465f2d69a45fd26f0", size = 10613, upload-time = "2025-01-01T14:16:05.977Z" },
 ]
 
 [[package]]

@@ -14,7 +14,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-AGENT_JWT = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4ZTJjNmI5My0yMzIzLTQ4ODYtOTgzNS0xZmU0NWFiNWU2YWQiLCJleHAiOjI1MzQwMjMwMDc5OSwidXNlcl9pZCI6IjY5NjVlNWMwLTE0MzQtNDkzNS1hYTAwLWFjZTIxNTVmMTE5YSJ9.0aOTyht2CuY6SqJR8r6-616cG2SFSzToKNcdfDRqGlI" # noqa: E501
+AGENT_JWT = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzZGMzMzQ2ZC1hZDdiLTQwNTctODA4OC05NzhkYjBmYzQxYTIiLCJleHAiOjI1MzQwMjMwMDc5OSwidXNlcl9pZCI6IjhhNTM3MjVmLTMzNzAtNDk3ZS05MDU5LWQ1MmRmOTdmZjE0OSJ9.AmY3Q6pPSWH3uP1sCSq3LoiNWVvqdSaJajRZGQNhdLE" # noqa: E501
 session = GenAISession(jwt_token=AGENT_JWT)
 
 def _pdf_bytes_to_text(pdf_bytes: bytes, *, dpi: int = 300, lang: str = "eng") -> str:
