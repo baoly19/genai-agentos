@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
 Simple script to register all agents and update their JWT tokens.
+Handles existing agents to avoid duplicates.
 """
 
 import asyncio
@@ -9,7 +10,7 @@ import sys
 from pathlib import Path
 from uuid import uuid4
 import httpx
-from typing import Optional
+from typing import Optional, List, Dict
 
 # Add the CLI src to path
 sys.path.insert(0, str(Path(__file__).parent / "src"))
@@ -38,6 +39,17 @@ async def login_user(username: str, password: str, base_url: str = "http://local
             print(f"❌ Login failed: {response.status_code}")
             return None
 
+async def get_existing_agents(jwt_token: str, base_url: str = "http://localhost:8000") -> List[Dict]:
+    """Get list of existing agents"""
+    async with httpx.AsyncClient(base_url=base_url) as client:
+        headers = {"Authorization": f"Bearer {jwt_token}"}
+        response = await client.get("/api/agents/", headers=headers)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            print(f"❌ Failed to get existing agents: {response.status_code}")
+            return []
+
 async def register_agent_api(agent_id: str, name: str, description: str, jwt_token: str, base_url: str = "http://localhost:8000") -> Optional[str]:
     """Register agent and return agent JWT token"""
     async with httpx.AsyncClient(base_url=base_url) as client:
@@ -57,7 +69,11 @@ async def register_agent_api(agent_id: str, name: str, description: str, jwt_tok
         else:
             print(f"❌ Failed to register {name}: {response.status_code}")
             if response.status_code == 400:
-                print(f"   Error: {response.text}")
+                error_text = response.text
+                if "already exists" in error_text:
+                    print(f"   Agent {name} already exists")
+                else:
+                    print(f"   Error: {error_text}")
             return None
 
 def load_user_jwt() -> Optional[str]:
@@ -129,10 +145,17 @@ def update_jwt_token(agent_name: str, jwt_token: str):
         print(f"❌ Error updating {agent_name}: {e}")
         return False
 
+def find_existing_agent_by_name(existing_agents: List[Dict], agent_name: str) -> Optional[Dict]:
+    """Find existing agent by name"""
+    for agent in existing_agents:
+        if agent.get("agent_name") == agent_name:
+            return agent
+    return None
+
 async def main():
     """Main function"""
-    print("🤖 Agent Registration & JWT Update")
-    print("=" * 40)
+    print("🤖 Smart Agent Registration & JWT Update")
+    print("=" * 50)
     
     # Check if user is logged in
     user_jwt = load_user_jwt()
@@ -161,15 +184,57 @@ async def main():
         except Exception as e:
             print(f"⚠️  Warning: Could not save credentials: {e}")
     
+    # Get existing agents
+    print("\n🔍 Checking existing agents...")
+    existing_agents = await get_existing_agents(user_jwt)
+    
+    if existing_agents:
+        print(f"📋 Found {len(existing_agents)} existing agents:")
+        for agent in existing_agents:
+            print(f"   - {agent.get('agent_name', 'Unknown')}")
+    else:
+        print("📋 No existing agents found")
+    
     registered = 0
     updated = 0
+    skipped = 0
     
     print(f"\n🚀 Processing {len(AGENTS)} agents...")
     
     for agent_name, description in AGENTS.items():
         print(f"\n📝 Processing: {agent_name}")
         
-        # Register agent
+        # Check if agent already exists
+        existing_agent = find_existing_agent_by_name(existing_agents, agent_name)
+        
+        if existing_agent:
+            print(f"ℹ️  Agent {agent_name} already exists")
+            
+            # Ask user what to do
+            choice = input(f"   What to do? (s)kip, (u)pdate JWT only, (r)egister new: ").lower().strip()
+            
+            if choice == 's':
+                print(f"⏭️  Skipped: {agent_name}")
+                skipped += 1
+                continue
+            elif choice == 'u':
+                # Use existing agent's JWT
+                existing_jwt = existing_agent.get("agent_jwt")
+                if existing_jwt and update_jwt_token(agent_name, existing_jwt):
+                    updated += 1
+                    print(f"✅ Updated JWT for existing agent: {agent_name}")
+                else:
+                    print(f"❌ Failed to update JWT for: {agent_name}")
+                continue
+            elif choice == 'r':
+                print(f"🔄 Will register new agent with same name: {agent_name}")
+                # Continue to registration
+            else:
+                print(f"⏭️  Invalid choice, skipping: {agent_name}")
+                skipped += 1
+                continue
+        
+        # Register new agent
         agent_jwt = await register_agent_api(
             agent_id=str(uuid4()),
             name=agent_name,
@@ -188,10 +253,12 @@ async def main():
             print(f"❌ Failed to register: {agent_name}")
     
     print(f"\n📊 Results:")
-    print(f"   ✅ Registered: {registered}/{len(AGENTS)}")
-    print(f"   🔄 Updated: {updated}/{len(AGENTS)}")
+    print(f"   ✅ Registered: {registered}")
+    print(f"   🔄 Updated: {updated}")
+    print(f"   ⏭️  Skipped: {skipped}")
+    print(f"   📁 Total: {len(AGENTS)}")
     
-    if registered > 0:
+    if registered > 0 or updated > 0:
         print(f"\n🚀 Ready to run agents:")
         print(f"   python run_all_agents.py")
 

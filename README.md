@@ -66,25 +66,73 @@ This system uses a multi-agent architecture to provide comprehensive medical ana
 - PubMed API access
 - MCP server setup
 
-### Environment Variables
-```bash
-# Required API Keys
-OPENAPI_KEY=your_openai_api_key
-PUBMED_EMAIL=your_email@domain.com
+## 🚀 Setup Instructions
 
-# Other configurations
-MCP_ENDPOINT=https://your-mcp-server.com
+### 1. 🌐 Google Colab MCP Server Setup
+
+The system requires a Google Colab MCP server for medical image analysis. : [Open MCP Server on Google Colab](https://colab.research.google.com/drive/10SrM5UrB_jHVfnsWO0uoQOTCzoWtaiMM?usp=sharing)
+
+- Once the notebook has finished running, copy the MCP Server Endpoint displayed in the last cell.
+- Paste the copied endpoint into the following file:
+"agents/get_image_and_upload_mcp/get_image_and_upload_mcp.py"
+
+### 2. 🔧 Environment Configuration
+Each agent needs API keys. Update the following files:
+
+**For PubMed Search Agent:**
+Create .env file with these fields:
+```bash
+PUBMED_EMAIL= your-pubmed-email
+PUBMED_API_KEY= your-pubmed-api-key
+OPENAPI_KEY= your-open-api-key
 ```
 
-## 📊 Agent Specifications
+**For other OpenAI-powered agents:**
+Create .env file with this field:
+```bash
+OPENAPI_KEY= your-open-api-key
+```
 
-| Agent | Input Format | Output Format | Processing Time |
-|-------|-------------|---------------|-----------------|
-| Analyzer | Free text | JSON structure | ~2-3 seconds |
-| Image Upload MCP | File ID | Upload URI | ~5-10 seconds |
-| Diagnosis Reasoner | JSON + Image data | Diagnosis list | ~10-15 seconds |
-| PubMed Search | Search terms | Research summary | ~5-8 seconds |
-| Treatment Recommender | Diagnosis + Research | Treatment plan | ~8-12 seconds |
+
+### 3. 🏃 Start AgentOS System
+
+```bash
+cd cli
+docker-compose up -d
+
+python cli.py signup -u <username> # Register a new user, also available in [UI](http://localhost:3000/)
+
+python cli.py login -u <username> -p <password> # Login to the system, get JWT user token
+```
+
+### 4. 🤖 Register All Agents
+
+```bash
+# Register all agents with the backend
+cd cli
+python register_agents.py
+
+# Follow the interactive prompts:
+# - Login with your credentials
+# - Handle any duplicate agents
+# - Confirm registration
+```
+
+### 5. 🚀 Start All Agents
+
+```bash
+# Start all agents simultaneously
+cd cli
+python run_all_agents.py
+
+# The script will:
+# - Create virtual environments for each agent
+# - Install dependencies
+# - Start all agents in parallel
+```
+
+### 6. 🚀 Open the CLI 
+Open Frontend UI: http://localhost:3000/ and start chat with **AutoClinic**!
 
 ## 🎯 Example Usage
 ### 🩺 Case 1: Mr. Adam Nguyen – Respiratory Symptoms with Chest X-ray
