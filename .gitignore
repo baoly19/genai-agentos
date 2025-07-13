@@ -183,7 +183,7 @@ examples/
 ### Images ###
 # JPEG
 *.jpg
-*.jpeg
+# *.jpeg
 *.jpe
 *.jif
 *.jfif
@@ -227,7 +227,7 @@ examples/
 *.svgz
 
 # Portable Document Format
-*.pdf
+# *.pdf
 
 ### Video ###
 *.3g2
