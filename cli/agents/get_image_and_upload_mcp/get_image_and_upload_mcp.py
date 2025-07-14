@@ -8,7 +8,7 @@ from fastmcp import Client
 AGENT_JWT = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4YmY0MDQwMy03MmNhLTQ2MjMtYWRiYy1iN2M0Nzk0YzU1ZGMiLCJleHAiOjI1MzQwMjMwMDc5OSwidXNlcl9pZCI6IjhhNTM3MjVmLTMzNzAtNDk3ZS05MDU5LWQ1MmRmOTdmZjE0OSJ9.6oOUTAdPCbhsI09d7HgcFvSzhKaIvTexvw-QS0hqny8" # noqa: E501
 session = GenAISession(jwt_token=AGENT_JWT)
 
-MCP_URL = "https://2a407279aae7.ngrok-free.app/mcp"
+MCP_URL = "https://aaa6824707c7.ngrok-free.app/mcp"
 @session.bind(
     name="get_image_and_upload_mcp",
     description="Get image and upload to ai mcp server"
